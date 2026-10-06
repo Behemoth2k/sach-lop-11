@@ -1,672 +1,457 @@
 <!DOCTYPE html>
-<html lang="vi">
+<html lang="vi" class="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Thư Viện Sách Lớp 11</title>
+    <title>Robotics Team Portfolio | FTC & V5</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        darkBg: '#090d16',
+                        cardBg: '#111827',
+                        accentFtc: '#00d2ff',
+                        accentV5: '#ff3366',
+                        neonPurple: '#a855f7'
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Font Inter & Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-        }
-        body {
-            background: #f0f7ff;
-            color: #1e293b;
-            min-height: 100vh;
-            line-height: 1.5;
-        }
-        header {
-            background: linear-gradient(135deg, #1e40af, #3b82f6);
-            color: white;
-            padding: 18px 0;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            box-shadow: 0 4px 20px rgba(30, 64, 175, 0.25);
-        }
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-        .header-content {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 20px;
-            flex-wrap: wrap;
-        }
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            font-size: 1.5rem;
-            font-weight: 700;
-            cursor: pointer;
-        }
-        .logo-icon {
-            background: rgba(255,255,255,0.2);
-            width: 42px;
-            height: 42px;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.4rem;
-        }
-        .search-box {
-            flex: 1;
-            max-width: 420px;
-            position: relative;
-        }
-        .search-box input {
-            width: 100%;
-            padding: 12px 18px 12px 46px;
-            border-radius: 50px;
-            border: none;
-            font-size: 0.95rem;
-            outline: none;
-            background: white;
-            color: #1e293b;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
-        }
-        .search-box input::placeholder {
-            color: #94a3b8;
-        }
-        .search-box::before {
-            content: "🔍";
-            position: absolute;
-            left: 16px;
-            top: 50%;
-            transform: translateY(-50%);
-            font-size: 1.1rem;
-        }
-        main {
-            padding: 30px 0 50px;
-        }
-        .page-title {
-            font-size: 1.6rem;
-            font-weight: 700;
-            color: #1e40af;
-            margin-bottom: 8px;
-        }
-        .page-subtitle {
-            color: #64748b;
-            margin-bottom: 25px;
-            font-size: 0.95rem;
-        }
-        .filters {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-            margin-bottom: 25px;
-        }
-        .filter-btn {
-            padding: 9px 18px;
-            border-radius: 50px;
-            border: 2px solid #e2e8f0;
-            background: white;
-            color: #475569;
-            font-size: 0.9rem;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.25s;
-        }
-        .filter-btn:hover {
-            border-color: #3b82f6;
-            color: #1e40af;
-        }
-        .filter-btn.active {
-            background: #1e40af;
-            border-color: #1e40af;
-            color: white;
-        }
-        .stats {
-            color: #64748b;
-            font-size: 0.9rem;
-            margin-bottom: 20px;
-        }
-        .books-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-            gap: 22px;
-        }
-        .book-card {
-            background: white;
-            border-radius: 16px;
-            overflow: hidden;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.06);
-            transition: all 0.3s ease;
-            cursor: pointer;
-            border: 1px solid #e2e8f0;
-        }
-        .book-card:hover {
-            transform: translateY(-6px);
-            box-shadow: 0 12px 30px rgba(30, 64, 175, 0.15);
-            border-color: #93c5fd;
-        }
-        .book-cover {
-            height: 160px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 3.5rem;
-            position: relative;
-            background: linear-gradient(145deg, #dbeafe, #eff6ff);
-        }
-        .book-cover .subject-badge {
-            position: absolute;
-            top: 12px;
-            right: 12px;
-            background: #1e40af;
-            color: white;
-            font-size: 0.7rem;
-            font-weight: 600;
-            padding: 4px 10px;
-            border-radius: 20px;
-        }
-        .book-info {
-            padding: 16px;
-        }
-        .book-title {
-            font-size: 1.05rem;
-            font-weight: 700;
-            color: #1e293b;
-            margin-bottom: 4px;
-            line-height: 1.35;
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-        }
-        .book-author {
-            color: #64748b;
-            font-size: 0.85rem;
-            margin-bottom: 12px;
-        }
-        .book-meta {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 0.8rem;
-            color: #94a3b8;
-        }
-        .book-type {
-            background: #f1f5f9;
-            padding: 3px 8px;
-            border-radius: 6px;
-            color: #475569;
-            font-weight: 500;
-        }
-        /* Modal */
-        .modal-overlay {
-            display: none;
-            position: fixed;
-            inset: 0;
-            background: rgba(15, 23, 42, 0.6);
-            backdrop-filter: blur(4px);
-            z-index: 1000;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-        }
-        .modal-overlay.active {
-            display: flex;
-        }
-        .modal {
-            background: white;
-            border-radius: 20px;
-            max-width: 640px;
-            width: 100%;
-            max-height: 90vh;
-            overflow-y: auto;
-            box-shadow: 0 25px 50px rgba(0,0,0,0.2);
-            animation: modalIn 0.3s ease;
-        }
-        @keyframes modalIn {
-            from { opacity: 0; transform: scale(0.95) translateY(10px); }
-            to { opacity: 1; transform: scale(1) translateY(0); }
-        }
-        .modal-header {
-            padding: 22px 26px;
-            border-bottom: 1px solid #e2e8f0;
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            gap: 15px;
-        }
-        .modal-title {
-            font-size: 1.35rem;
-            font-weight: 700;
-            color: #1e293b;
-        }
-        .close-btn {
-            background: #f1f5f9;
-            border: none;
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            font-size: 1.3rem;
-            color: #64748b;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.2s;
-            flex-shrink: 0;
-        }
-        .close-btn:hover {
-            background: #e2e8f0;
-            color: #1e293b;
-        }
-        .modal-body {
-            padding: 26px;
-        }
-        .modal-top {
-            display: flex;
-            gap: 22px;
-            margin-bottom: 20px;
-        }
-        .modal-cover {
-            width: 120px;
-            height: 150px;
-            background: linear-gradient(145deg, #dbeafe, #eff6ff);
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 3.2rem;
-            flex-shrink: 0;
-        }
-        .modal-info p {
-            margin-bottom: 8px;
-            font-size: 0.95rem;
-        }
-        .modal-info strong {
-            color: #1e40af;
-            font-weight: 600;
-        }
-        .modal-desc {
-            color: #475569;
-            line-height: 1.65;
-            margin-bottom: 24px;
-            font-size: 0.95rem;
-        }
-        .modal-actions {
-            display: flex;
-            gap: 12px;
-            flex-wrap: wrap;
-        }
-        .btn {
-            padding: 11px 22px;
-            border-radius: 10px;
-            border: none;
-            font-weight: 600;
-            font-size: 0.92rem;
-            cursor: pointer;
-            transition: all 0.25s;
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-        }
-        .btn-primary {
-            background: #1e40af;
-            color: white;
-        }
-        .btn-primary:hover {
-            background: #1e3a8a;
-        }
-        .btn-secondary {
-            background: #f1f5f9;
-            color: #334155;
-        }
-        .btn-secondary:hover {
-            background: #e2e8f0;
-        }
-        .empty-state {
-            grid-column: 1 / -1;
-            text-align: center;
-            padding: 60px 20px;
-            color: #94a3b8;
-        }
-        .empty-state .icon {
-            font-size: 3.5rem;
-            margin-bottom: 12px;
-        }
-        footer {
-            text-align: center;
-            padding: 20px;
-            color: #94a3b8;
-            font-size: 0.85rem;
-            border-top: 1px solid #e2e8f0;
-            background: white;
-        }
-        @media (max-width: 640px) {
-            .header-content {
-                flex-direction: column;
-                align-items: stretch;
-            }
-            .search-box {
-                max-width: 100%;
-            }
-            .modal-top {
-                flex-direction: column;
-                align-items: center;
-                text-align: center;
-            }
-            .modal-cover {
-                margin: 0 auto;
-            }
-            .books-grid {
-                grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-            }
-        }
+        body { font-family: 'Inter', sans-serif; background-color: #090d16; color: #f3f4f6; }
+        .glow-ftc { box-shadow: 0 0 20px rgba(0, 210, 255, 0.2); }
+        .glow-v5 { box-shadow: 0 0 20px rgba(255, 51, 102, 0.2); }
+        .glow-ftc-text { text-shadow: 0 0 10px rgba(0, 210, 255, 0.5); }
+        .glow-v5-text { text-shadow: 0 0 10px rgba(255, 51, 102, 0.5); }
     </style>
 </head>
-<body>
-<header>
-    <div class="container">
-        <div class="header-content">
-            <div class="logo" onclick="resetView()">
-                <div class="logo-icon">📚</div>
-                <span>Thư Viện Lớp 11</span>
-            </div>
-            <div class="search-box">
-                <input type="text" id="searchInput" placeholder="Tìm sách, môn học..." autocomplete="off">
-            </div>
-        </div>
-    </div>
-</header>
-<main>
-    <div class="container">
-        <h1 class="page-title">Sách giáo khoa Lớp 11</h1>
-        <p class="page-subtitle">
-            Bấm vào sách → chọn “Lấy tài liệu” để mở đúng cuốn sách trên trang chính thức taphuan.nxbgd.vn
-        </p>
-        <div class="filters" id="filters">
-            <button class="filter-btn active" data-subject="all">Tất cả</button>
-            <button class="filter-btn" data-subject="Toán">Toán</button>
-            <button class="filter-btn" data-subject="Vật lý">Vật lý</button>
-            <button class="filter-btn" data-subject="Hóa học">Hóa học</button>
-            <button class="filter-btn" data-subject="Sinh học">Sinh học</button>
-            <button class="filter-btn" data-subject="Ngữ văn">Ngữ văn</button>
-            <button class="filter-btn" data-subject="Lịch sử">Lịch sử</button>
-            <button class="filter-btn" data-subject="Địa lý">Địa lý</button>
-            <button class="filter-btn" data-subject="Tiếng Anh">Tiếng Anh</button>
-            <button class="filter-btn" data-subject="Tin học">Tin học</button>
-            <button class="filter-btn" data-subject="GDKT&PL">GDKT & PL</button>
-        </div>
-        <div class="stats" id="stats">Đang tải...</div>
-        <div class="books-grid" id="booksGrid"></div>
-    </div>
-</main>
-<!-- Modal -->
-<div class="modal-overlay" id="modal">
-    <div class="modal">
-        <div class="modal-header">
-            <h2 class="modal-title" id="modalTitle"></h2>
-            <button class="close-btn" onclick="closeModal()">×</button>
-        </div>
-        <div class="modal-body">
-            <div class="modal-top">
-                <div class="modal-cover" id="modalCover"></div>
-                <div class="modal-info">
-                    <p><strong>Môn học:</strong> <span id="modalSubject"></span></p>
-                    <p><strong>Loại sách:</strong> <span id="modalType"></span></p>
-                    <p><strong>Nhà xuất bản:</strong> NXB Giáo dục Việt Nam</p>
-                    <p><strong>Năm:</strong> <span id="modalYear"></span></p>
+<body class="bg-darkBg min-h-screen flex flex-col selection:bg-cyan-500 selection:text-black">
+
+    <header class="sticky top-0 z-50 backdrop-blur-md bg-[#090d16]/80 border-b border-gray-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-cyan-500 to-pink-500 flex items-center justify-center font-extrabold text-xl shadow-lg">
+                    <i class="fa-solid fa-robot text-white"></i>
+                </div>
+                <div>
+                    <span class="text-xl font-bold bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-500 bg-clip-text text-transparent">ROBOTICS TEAM</span>
+                    <span class="block text-xs text-gray-400 font-medium tracking-widest uppercase">FTC & V5 Division</span>
                 </div>
             </div>
-            <div class="modal-desc" id="modalDesc"></div>
-            <div class="modal-actions">
-                <a id="viewBookBtn" href="#" target="_blank" class="btn btn-primary">
-                    📖 Lấy tài liệu / Xem sách
-                </a>
-                <button class="btn btn-secondary" onclick="alert('Đã thêm vào danh sách yêu thích!')">❤️ Yêu thích</button>
-                <button class="btn btn-secondary" onclick="closeModal()">Đóng</button>
+            
+            <nav class="hidden md:flex items-center space-x-8 font-medium text-sm">
+                <a href="#overview" class="text-gray-300 hover:text-cyan-400 transition">Tổng quan</a>
+                <a href="#ftc" class="text-gray-300 hover:text-cyan-400 transition">Mảng FTC</a>
+                <a href="#v5" class="text-gray-300 hover:text-pink-500 transition">Mảng V5</a>
+                <a href="#posts" class="text-gray-300 hover:text-purple-400 transition">Nhật ký hoạt động</a>
+                <a href="#awards" class="text-gray-300 hover:text-yellow-400 transition">Thành tích</a>
+            </nav>
+
+            <div class="flex items-center space-x-4">
+                <button onclick="openPostModal()" class="bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white font-semibold px-4 py-2 rounded-xl text-sm transition shadow-lg flex items-center space-x-2">
+                    <i class="fa-solid fa-plus"></i>
+                    <span>Đăng bài mới</span>
+                </button>
             </div>
         </div>
-    </div>
-</div>
-<footer>
-    Thư Viện Sách Lớp 11 • Liên kết trực tiếp taphuan.nxbgd.vn • 2026<br>
-    <span style="display: inline-block; margin-top: 6px;">👀 Tổng lượt truy cập: <strong id="visitor-count">Đang tải...</strong></span>
-</footer>
-<script>
-    // ====================== DỮ LIỆU SÁCH + LINK TRỰC TIẾP ======================
-    const books = [
-        {
-            id: 1,
-            title: "Toán 11 - Tập 1",
-            subject: "Toán",
-            type: "Sách giáo khoa",
-            year: 2023,
-            emoji: "📐",
-            desc: "Sách giáo khoa Toán lớp 11 Tập 1 (bộ Kết nối tri thức với cuộc sống).",
-            link: "https://taphuan.nxbgd.vn/tap-huan/doc-sach/sgk-toan-11-tap-mot.4701050771#page=0"
-        },
-        {
-            id: 2,
-            title: "Toán 11 - Tập 2",
-            subject: "Toán",
-            type: "Sách giáo khoa",
-            year: 2023,
-            emoji: "📊",
-            desc: "Sách giáo khoa Toán lớp 11 Tập 2.",
-            link: "https://taphuan.nxbgd.vn/tap-huan/doc-sach/sgk-toan-11-tap-hai.4701058816#page=0"
-        },
-        {
-            id: 3,
-            title: "Ngữ văn 11 - Tập 1",
-            subject: "Ngữ văn",
-            type: "Sách giáo khoa",
-            year: 2023,
-            emoji: "📖",
-            desc: "Sách giáo khoa Ngữ văn 11 Tập 1.",
-            link: "https://taphuan.nxbgd.vn/tap-huan/doc-sach/sgk-ngu-van-11-tap-mot.4701014733"
-        },
-        {
-            id: 4,
-            title: "Ngữ văn 11 - Tập 2",
-            subject: "Ngữ văn",
-            type: "Sách giáo khoa",
-            year: 2023,
-            emoji: "✍️",
-            desc: "Sách giáo khoa Ngữ văn 11 Tập 2.",
-            link: "https://taphuan.nxbgd.vn/tap-huan/doc-sach/sgk-ngu-van-11-tap-hai.4701023518#page=0"
-        },
-        {
-            id: 5,
-            title: "Tiếng Anh 11 - Global Success",
-            subject: "Tiếng Anh",
-            type: "Sách giáo khoa",
-            year: 2023,
-            emoji: "🇬🇧",
-            desc: "Sách giáo khoa Tiếng Anh 11 Global Success.",
-            link: "https://taphuan.nxbgd.vn/tap-huan/doc-sach/sgk-tieng-anh-11-global-success.4879788302#page=0"
-        },
-        {
-            id: 6,
-            title: "Lịch sử 11",
-            subject: "Lịch sử",
-            type: "Sách giáo khoa",
-            year: 2023,
-            emoji: "🏛️",
-            desc: "Sách giáo khoa Lịch sử 11.",
-            link: "https://taphuan.nxbgd.vn/tap-huan/doc-sach/sgk-lich-su-11.4720315375#page=0"
-        },
-        {
-            id: 7,
-            title: "Địa lý 11",
-            subject: "Địa lý",
-            type: "Sách giáo khoa",
-            year: 2023,
-            emoji: "🌍",
-            desc: "Sách giáo khoa Địa lý 11.",
-            link: "https://taphuan.nxbgd.vn/tap-huan/doc-sach/sgk-dia-li-11.4720361879#page=0"
-        },
-        {
-            id: 8,
-            title: "Giáo dục Kinh tế và Pháp luật 11",
-            subject: "GDKT&PL",
-            type: "Sách giáo khoa",
-            year: 2023,
-            emoji: "⚖️",
-            desc: "Sách giáo khoa Giáo dục Kinh tế và Pháp luật 11.",
-            link: "https://taphuan.nxbgd.vn/tap-huan/doc-sach/sgk-giao-duc-kinh-te-va-phap-luat-11.4720430286"
-        },
-        {
-            id: 9,
-            title: "Vật lý 11",
-            subject: "Vật lý",
-            type: "Sách giáo khoa",
-            year: 2023,
-            emoji: "⚡",
-            desc: "Sách giáo khoa Vật lý 11.",
-            link: "https://taphuan.nxbgd.vn/tap-huan/doc-sach/sgk-vat-li-11.4701093133#page=0"
-        },
-        {
-            id: 10,
-            title: "Hóa học 11",
-            subject: "Hóa học",
-            type: "Sách giáo khoa",
-            year: 2023,
-            emoji: "🧪",
-            desc: "Sách giáo khoa Hóa học 11.",
-            link: "https://taphuan.nxbgd.vn/tap-huan/doc-sach/sgk-hoa-hoc-11.4701111834#page=0"
-        },
-        {
-            id: 11,
-            title: "Sinh học 11",
-            subject: "Sinh học",
-            type: "Sách giáo khoa",
-            year: 2023,
-            emoji: "🌿",
-            desc: "Sách giáo khoa Sinh học 11.",
-            link: "https://taphuan.nxbgd.vn/tap-huan/doc-sach/sgk-sinh-hoc-11.4701129740#page=0"
-        },
-        {
-            id: 12,
-            title: "Tin học 11 (Định hướng Tin học ứng dụng)",
-            subject: "Tin học",
-            type: "Sách giáo khoa",
-            year: 2023,
-            emoji: "💻",
-            desc: "Sách giáo khoa Tin học 11 - Định hướng Tin học ứng dụng.",
-            link: "https://taphuan.nxbgd.vn/tap-huan/doc-sach/sgk-tin-hoc-11-dinh-huong-tin-hoc-ung-dung.4701297754#page=0"
-        },
-        {
-            id: 13,
-            title: "Chuyên đề học tập Tin học 11",
-            subject: "Tin học",
-            type: "Chuyên đề",
-            year: 2023,
-            emoji: "🖥️",
-            desc: "Chuyên đề học tập Tin học 11 - Định hướng Tin học ứng dụng.",
-            link: "https://taphuan.nxbgd.vn/tap-huan/doc-sach/sgk-chuyen-de-hoc-tap-tin-hoc-11-dinh-huong-tin-hoc-ung-dung.4783430698"
-        }
-    ];
-    let currentSubject = "all";
-    let searchQuery = "";
-    function renderBooks() {
-        const grid = document.getElementById("booksGrid");
-        const stats = document.getElementById("stats");
-        const filtered = books.filter(book => {
-            const matchSubject = currentSubject === "all" || book.subject === currentSubject;
-            const q = searchQuery.toLowerCase();
-            const matchSearch = 
-                book.title.toLowerCase().includes(q) ||
-                book.subject.toLowerCase().includes(q) ||
-                book.type.toLowerCase().includes(q);
-            return matchSubject && matchSearch;
-        });
-        stats.textContent = `Hiển thị ${filtered.length} cuốn sách`;
-        if (filtered.length === 0) {
-            grid.innerHTML = `
-                <div class="empty-state">
-                    <div class="icon">📭</div>
-                    <h3>Không tìm thấy sách</h3>
-                    <p>Thử đổi từ khóa hoặc chọn môn khác</p>
+    </header>
+
+    <main class="flex-grow">
+        <section id="overview" class="relative py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto text-center overflow-hidden">
+            <div class="absolute inset-0 -z-10 flex items-center justify-center opacity-20 pointer-events-none">
+                <div class="w-[500px] h-[500px] bg-gradient-to-tr from-cyan-500 to-pink-500 rounded-full blur-[120px]"></div>
+            </div>
+            
+            <span class="inline-block py-1 px-4 rounded-full bg-gray-800 border border-gray-700 text-cyan-400 text-xs font-semibold mb-6 uppercase tracking-wider">
+                Official Robotics Portfolio & Logbook
+            </span>
+            <h1 class="text-4xl sm:text-6xl font-extrabold tracking-tight mb-6 leading-tight">
+                Chinh Phục Tương Lai Bằng <br>
+                <span class="bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-500 bg-clip-text text-transparent">Đam Mê & Công Nghệ</span>
+            </h1>
+            <p class="max-w-3xl mx-auto text-gray-400 text-lg mb-10">
+                Chào mừng bạn đến với trang hồ sơ chung của đội tuyển Robotics. Nơi lưu trữ toàn bộ hành trình chế tạo, lập trình và tranh tài tại hai đấu trường lớn: <span class="text-cyan-400 font-semibold">First Tech Challenge (FTC)</span> và <span class="text-pink-500 font-semibold">VEX V5 Robotics Competition</span>.
+            </p>
+            
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-4xl mx-auto mt-12">
+                <div class="bg-cardBg/60 backdrop-blur border border-cyan-500/30 rounded-2xl p-8 text-left glow-ftc transition hover:border-cyan-400">
+                    <div class="w-12 h-12 rounded-xl bg-cyan-500/10 text-cyan-400 flex items-center justify-center text-2xl mb-4 font-bold">FTC</div>
+                    <h2 class="text-2xl font-bold text-white mb-2">First Tech Challenge</h2>
+                    <p class="text-gray-400 text-sm mb-6">Tập trung vào giải pháp cơ khí tùy chỉnh, hệ thống điều khiển Java phức tạp và thiết kế robot quy mô lớn.</p>
+                    <a href="#ftc" class="text-cyan-400 font-semibold text-sm flex items-center space-x-2 hover:underline">
+                        <span>Khám phá mảng FTC</span>
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </a>
                 </div>
-            `;
-            return;
-        }
-        grid.innerHTML = filtered.map(book => `
-            <div class="book-card" onclick="openModal(${book.id})">
-                <div class="book-cover">
-                    ${book.emoji}
-                    <span class="subject-badge">${book.subject}</span>
+                
+                <div class="bg-cardBg/60 backdrop-blur border border-pink-500/30 rounded-2xl p-8 text-left glow-v5 transition hover:border-pink-400">
+                    <div class="w-12 h-12 rounded-xl bg-pink-500/10 text-pink-500 flex items-center justify-center text-2xl mb-4 font-bold">V5</div>
+                    <h2 class="text-2xl font-bold text-white mb-2">VEX V5 Robotics</h2>
+                    <p class="text-gray-400 text-sm mb-6">Tập trung vào tính tối ưu cấu trúc tiêu chuẩn, chiến thuật thi đấu nhanh và lập trình tự động sắc bén.</p>
+                    <a href="#v5" class="text-pink-500 font-semibold text-sm flex items-center space-x-2 hover:underline">
+                        <span>Khám phá mảng V5</span>
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </a>
                 </div>
-                <div class="book-info">
-                    <div class="book-title">${book.title}</div>
-                    <div class="book-author">${book.type}</div>
-                    <div class="book-meta">
-                        <span>${book.year}</span>
-                        <span class="book-type">SGK</span>
+            </div>
+        </section>
+
+        <section id="ftc" class="py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-t border-gray-800/80">
+            <div class="flex flex-col md:flex-row items-start md:items-center justify-between mb-10">
+                <div>
+                    <div class="flex items-center space-x-3 mb-2">
+                        <span class="w-3 h-3 rounded-full bg-cyan-400 animate-ping"></span>
+                        <span class="text-cyan-400 font-bold uppercase tracking-wider text-sm">Division 01</span>
+                    </div>
+                    <h2 class="text-3xl font-extrabold text-white">Mảng FTC (First Tech Challenge)</h2>
+                </div>
+                <p class="text-gray-400 max-w-md text-sm mt-2 md:mt-0">Nơi sáng tạo không giới hạn với nền tảng phần cứng mở, CAD thiết kế 3D chuyên sâu và lập trình hướng đối tượng.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="bg-cardBg border border-gray-800 rounded-2xl overflow-hidden p-6 hover:border-cyan-500/50 transition">
+                    <div class="text-cyan-400 text-3xl mb-4"><i class="fa-solid fa-gears"></i></div>
+                    <h3 class="text-xl font-bold text-white mb-2">Hệ Thống Cơ Khí</h3>
+                    <p class="text-gray-400 text-sm">Sử dụng nhôm định hình, custom 3D printing parts, hệ thống nâng hạ tuyến tính và cơ cấu gắp thông minh.</p>
+                </div>
+                <div class="bg-cardBg border border-gray-800 rounded-2xl overflow-hidden p-6 hover:border-cyan-500/50 transition">
+                    <div class="text-cyan-400 text-3xl mb-4"><i class="fa-solid fa-code"></i></div>
+                    <h3 class="text-xl font-bold text-white mb-2">Lập Trình Java (RoadRunner)</h3>
+                    <p class="text-gray-400 text-sm">Ứng dụng thuật toán điều hướng đường đi tự động (Autonomous) chính xác cao kết hợp OpenCV nhận diện vật thể.</p>
+                </div>
+                <div class="bg-cardBg border border-gray-800 rounded-2xl overflow-hidden p-6 hover:border-cyan-500/50 transition">
+                    <div class="text-cyan-400 text-3xl mb-4"><i class="fa-solid fa-users-gear"></i></div>
+                    <h3 class="text-xl font-bold text-white mb-2">Vận Hành & Chiến Thuật</h3>
+                    <p class="text-gray-400 text-sm">Phân vai rõ ràng giữa Driver, Operator, Scouter và lập kế hoạch bảo trì robot liên tục trong giải đấu.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="v5" class="py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-t border-gray-800/80">
+            <div class="flex flex-col md:flex-row items-start md:items-center justify-between mb-10">
+                <div>
+                    <div class="flex items-center space-x-3 mb-2">
+                        <span class="w-3 h-3 rounded-full bg-pink-500 animate-ping"></span>
+                        <span class="text-pink-500 font-bold uppercase tracking-wider text-sm">Division 02</span>
+                    </div>
+                    <h2 class="text-3xl font-extrabold text-white">Mảng V5 (VEX V5 Robotics)</h2>
+                </div>
+                <p class="text-gray-400 max-w-md text-sm mt-2 md:mt-0">Đấu trường tốc độ cao, tiêu chuẩn hóa linh kiện VEX IQ/V5 với những pha tranh chấp kịch tính và kỹ thuật tối ưu hóa trọng lượng.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="bg-cardBg border border-gray-800 rounded-2xl overflow-hidden p-6 hover:border-pink-500/50 transition">
+                    <div class="text-pink-500 text-3xl mb-4"><i class="fa-solid fa-bolt"></i></div>
+                    <h3 class="text-xl font-bold text-white mb-2">Tốc Độ & Tải Trọng</h3>
+                    <p class="text-gray-400 text-sm">Tối ưu tỷ số truyền động motor V5, thiết kế khung gầm siêu nhẹ chịu lực tốt, phản ứng nhanh nhạy trên sân đấu.</p>
+                </div>
+                <div class="bg-cardBg border border-gray-800 rounded-2xl overflow-hidden p-6 hover:border-pink-500/50 transition">
+                    <div class="text-pink-500 text-3xl mb-4"><i class="fa-solid fa-microchip"></i></div>
+                    <h3 class="text-xl font-bold text-white mb-2">VEXcode & PROS C++</h3>
+                    <p class="text-gray-400 text-sm">Lập trình điều khiển đa luồng, PID control cho hệ thống văng, thu hồi và xử lý sensor IMU siêu chính xác.</p>
+                </div>
+                <div class="bg-cardBg border border-gray-800 rounded-2xl overflow-hidden p-6 hover:border-pink-500/50 transition">
+                    <div class="text-pink-500 text-3xl mb-4"><i class="fa-solid fa-chess"></i></div>
+                    <h3 class="text-xl font-bold text-white mb-2">Thiết Kế Chiến Lược Liên Minh</h3>
+                    <p class="text-gray-400 text-sm">Nghiên cứu luật thi đấu mùa giải mới, phối hợp nhịp nhàng cùng liên minh để tối đa hóa điểm số.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="posts" class="py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-t border-gray-800/80">
+            <div class="flex flex-col sm:flex-row items-center justify-between mb-8 gap-4">
+                <div>
+                    <h2 class="text-3xl font-extrabold text-white">Nhật Ký & Hoạt Động Đội</h2>
+                    <p class="text-gray-400 text-sm mt-1">Cập nhật tin tức, quá trình chế tạo và nhật ký thi đấu từ cả hai mảng.</p>
+                </div>
+                
+                <!-- Filter Buttons -->
+                <div class="flex items-center space-x-2 bg-cardBg p-1.5 rounded-xl border border-gray-800">
+                    <button onclick="filterPosts('ALL')" id="filter-ALL" class="px-4 py-2 rounded-lg text-sm font-semibold transition bg-cyan-500 text-black">Tất cả</button>
+                    <button onclick="filterPosts('FTC')" id="filter-FTC" class="px-4 py-2 rounded-lg text-sm font-semibold transition text-gray-400 hover:text-white">Mảng FTC</button>
+                    <button onclick="filterPosts('V5')" id="filter-V5" class="px-4 py-2 rounded-lg text-sm font-semibold transition text-gray-400 hover:text-white">Mảng V5</button>
+                </div>
+            </div>
+
+            <!-- Posts Grid -->
+            <div id="posts-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Javascript will inject posts here -->
+            </div>
+
+            <div id="no-posts" class="hidden text-center py-16 text-gray-500">
+                <i class="fa-regular fa-folder-open text-4xl mb-3"></i>
+                <p>Chưa có bài viết nào trong mục này. Hãy bấm "Đăng bài mới" để thêm nội dung!</p>
+            </div>
+        </section>
+
+        <section id="awards" class="py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-t border-gray-800/80">
+            <div class="text-center mb-12">
+                <span class="text-yellow-400 font-bold uppercase tracking-wider text-sm">Milestones</span>
+                <h2 class="text-3xl font-extrabold text-white mt-1">Thành Tích & Giải Thưởng Nổi Bật</h2>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="bg-cardBg border border-gray-800 rounded-2xl p-6 text-center hover:border-yellow-500/40 transition">
+                    <div class="w-14 h-14 rounded-2xl bg-yellow-500/10 text-yellow-400 flex items-center justify-center text-2xl mx-auto mb-4 font-bold"><i class="fa-solid fa-trophy"></i></div>
+                    <span class="text-xs text-yellow-400 font-semibold uppercase tracking-wider">FTC National</span>
+                    <h3 class="text-lg font-bold text-white mt-1 mb-2">Inspire Award 2nd Place</h3>
+                    <p class="text-gray-400 text-xs">Giải thưởng truyền cảm hứng cao quý cho toàn diện kỹ thuật và lan tỏa STEM.</p>
+                </div>
+                <div class="bg-cardBg border border-gray-800 rounded-2xl p-6 text-center hover:border-pink-500/40 transition">
+                    <div class="w-14 h-14 rounded-2xl bg-pink-500/10 text-pink-500 flex items-center justify-center text-2xl mx-auto mb-4 font-bold"><i class="fa-solid fa-medal"></i></div>
+                    <span class="text-xs text-pink-500 font-semibold uppercase tracking-wider">VEX V5 Tournament</span>
+                    <h3 class="text-lg font-bold text-white mt-1 mb-2">Tournament Champion</h3>
+                    <p class="text-gray-400 text-xs">Vô địch bảng đấu liên minh sau trận chung kết nghẹt thở tại mùa giải VEX.</p>
+                </div>
+                <div class="bg-cardBg border border-gray-800 rounded-2xl p-6 text-center hover:border-cyan-500/40 transition">
+                    <div class="w-14 h-14 rounded-2xl bg-cyan-500/10 text-cyan-400 flex items-center justify-center text-2xl mx-auto mb-4 font-bold"><i class="fa-solid fa-code"></i></div>
+                    <span class="text-xs text-cyan-400 font-semibold uppercase tracking-wider">FTC Regional</span>
+                    <h3 class="text-lg font-bold text-white mt-1 mb-2">Design Award Winner</h3>
+                    <p class="text-gray-400 text-xs">Vinh danh bản vẽ kỹ thuật CAD hoàn thiện và quy trình thiết kế chuyên nghiệp.</p>
+                </div>
+                <div class="bg-cardBg border border-gray-800 rounded-2xl p-6 text-center hover:border-purple-500/40 transition">
+                    <div class="w-14 h-14 rounded-2xl bg-purple-500/10 text-purple-400 flex items-center justify-center text-2xl mx-auto mb-4 font-bold"><i class="fa-solid fa-star"></i></div>
+                    <span class="text-xs text-purple-400 font-semibold uppercase tracking-wider">VEX V5 Skills</span>
+                    <h3 class="text-lg font-bold text-white mt-1 mb-2">Robot Skills Top 3</h3>
+                    <p class="text-gray-400 text-xs">Khẳng định khả năng tự động hóa và điều khiển xuất sắc trong phần thi Skills.</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-[#05080e] border-t border-gray-800 py-10 mt-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between text-gray-400 text-sm">
+            <div class="flex items-center space-x-3 mb-4 sm:mb-0">
+                <div class="w-8 h-8 rounded-lg bg-gradient-to-tr from-cyan-500 to-pink-500 flex items-center justify-center text-white font-bold text-sm">
+                    <i class="fa-solid fa-robot"></i>
+                </div>
+                <span class="font-bold text-white">Robotics Team Portfolio (FTC & V5)</span>
+            </div>
+            <p>© 2026 Robotics Team. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <div id="post-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm hidden p-4">
+        <div class="bg-cardBg border border-gray-800 rounded-2xl max-w-lg w-full p-6 relative shadow-2xl">
+            <div class="flex items-center justify-between mb-6">
+                <h3 class="text-xl font-bold text-white flex items-center space-x-2">
+                    <i class="fa-solid fa-pen-to-square text-cyan-400"></i>
+                    <span>Đăng Bài Viết / Hoạt Động Mới</span>
+                </h3>
+                <button onclick="closePostModal()" class="text-gray-400 hover:text-white text-lg"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+
+            <form id="create-post-form" onsubmit="handlePostSubmit(event)" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-semibold uppercase text-gray-400 mb-1">Tiêu đề bài viết</label>
+                    <input type="text" id="post-title" required placeholder="Ví dụ: Hoàn thiện cơ chế gắp vòng FTC..." class="w-full bg-[#090d16] border border-gray-700 rounded-xl px-4 py-2.5 text-white text-sm focus:outline-none focus:border-cyan-400">
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-semibold uppercase text-gray-400 mb-1">Mảng thi đấu</label>
+                        <select id="post-category" class="w-full bg-[#090d16] border border-gray-700 rounded-xl px-4 py-2.5 text-white text-sm focus:outline-none focus:border-cyan-400">
+                            <option value="FTC">Mảng FTC</option>
+                            <option value="V5">Mảng V5</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold uppercase text-gray-400 mb-1">Ngày đăng</label>
+                        <input type="date" id="post-date" required class="w-full bg-[#090d16] border border-gray-700 rounded-xl px-4 py-2.5 text-white text-sm focus:outline-none focus:border-cyan-400">
                     </div>
                 </div>
-            </div>
-        `).join("");
-    }
-    function openModal(id) {
-        const book = books.find(b => b.id === id);
-        if (!book) return;
-        document.getElementById("modalTitle").textContent = book.title;
-        document.getElementById("modalCover").textContent = book.emoji;
-        document.getElementById("modalSubject").textContent = book.subject;
-        document.getElementById("modalType").textContent = book.type;
-        document.getElementById("modalYear").textContent = book.year;
-        document.getElementById("modalDesc").textContent = book.desc;
-        // Gán link trực tiếp
-        const btn = document.getElementById("viewBookBtn");
-        btn.href = book.link;
-        btn.target = "_blank";
-        document.getElementById("modal").classList.add("active");
-    }
-    function closeModal() {
-        document.getElementById("modal").classList.remove("active");
-    }
-    document.getElementById("modal").addEventListener("click", function(e) {
-        if (e.target === this) closeModal();
-    });
-    document.getElementById("searchInput").addEventListener("input", function(e) {
-        searchQuery = e.target.value.trim();
-        renderBooks();
-    });
-    document.querySelectorAll(".filter-btn").forEach(btn => {
-        btn.addEventListener("click", function() {
-            document.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
-            this.classList.add("active");
-            currentSubject = this.dataset.subject;
-            renderBooks();
-        });
-    });
-    function resetView() {
-        currentSubject = "all";
-        searchQuery = "";
-        document.getElementById("searchInput").value = "";
-        document.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
-        document.querySelector('.filter-btn[data-subject="all"]').classList.add("active");
-        renderBooks();
-        window.scrollTo({ top: 0, behavior: "smooth" });
-    }
-    renderBooks();
 
-    // ====================== HỆ THỐNG ĐẾM LƯỢT TRUY CẬP ======================
-    async function updateVisitorCount() {
-        try {
-            const response = await fetch('https://api.counterapi.dev/v1/sachgiaokhoalop11/visits/up');
-            const data = await response.json();
-            document.getElementById('visitor-count').textContent = data.count;
-        } catch (error) {
-            console.error('Không thể tải bộ đếm:', error);
-            document.getElementById('visitor-count').textContent = 'N/A';
+                <div>
+                    <label class="block text-xs font-semibold uppercase text-gray-400 mb-1">Link hình ảnh minh họa (URL)</label>
+                    <input type="url" id="post-image" placeholder="https://images.unsplash.com/photo-..." class="w-full bg-[#090d16] border border-gray-700 rounded-xl px-4 py-2.5 text-white text-sm focus:outline-none focus:border-cyan-400">
+                    <span class="text-[11px] text-gray-500 mt-1 block">Để trống nếu không có ảnh, hệ thống sẽ dùng ảnh mặc định.</span>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold uppercase text-gray-400 mb-1">Nội dung chi tiết hoạt động</label>
+                    <textarea id="post-content" rows="4" required placeholder="Mô tả quá trình, kết quả hoặc tiến độ công việc..." class="w-full bg-[#090d16] border border-gray-700 rounded-xl px-4 py-2.5 text-white text-sm focus:outline-none focus:border-cyan-400"></textarea>
+                </div>
+
+                <div class="flex items-center justify-end space-x-3 pt-2">
+                    <button type="button" onclick="closePostModal()" class="px-4 py-2 rounded-xl border border-gray-700 text-gray-300 text-sm font-semibold hover:bg-gray-800 transition">Hủy</button>
+                    <button type="submit" class="px-6 py-2 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 text-white text-sm font-semibold hover:opacity-90 transition">Đăng bài</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Default initial posts if localStorage is empty
+        const defaultPosts = [
+            {
+                id: 1,
+                title: "Thử nghiệm cơ cấu nâng hạ khung gầm FTC",
+                category: "FTC",
+                date: "2026-03-20",
+                image: "https://images.unsplash.com/photo-1485827404703-89b55fcc595e?auto=format&fit=crop&w=800&q=80",
+                content: "Đội ngũ kỹ thuật FTC đã hoàn thành việc lắp ráp hệ thống ròng rọc và test thử khả năng chịu tải của các thanh nhôm custom. Kết quả cho thấy độ ổn định cao khi nâng vật phẩm nặng."
+            },
+            {
+                id: 2,
+                title: "Tối ưu hóa mã nguồn tự động Autonomous cho V5",
+                category: "V5",
+                date: "2026-03-18",
+                image: "https://images.unsplash.com/photo-1517077304055-6e89abbf09b0?auto=format&fit=crop&w=800&q=80",
+                content: "Lập trình viên mảng V5 đã tích hợp thành công thuật toán PID cho các motor drive giúp robot di chuyển chính xác tuyệt đối 15 giây tự động trên sân đấu."
+            },
+            {
+                id: 3,
+                title: "Buổi kiểm tra robot tổng duyệt chuẩn bị trước giải đấu",
+                category: "FTC",
+                date: "2026-03-10",
+                image: "https://images.unsplash.com/photo-1563770660941-20978e870e26?auto=format&fit=crop&w=800&q=80",
+                content: "Toàn bộ thành viên cả 2 mảng cùng tham gia ráp sân chuẩn đấu trường để các driver luyện tập phản xạ và xử lý các tình huống va chạm bất ngờ."
+            }
+        ];
+
+        let currentFilter = 'ALL';
+
+        function getPosts() {
+            const stored = localStorage.getItem('robotics_team_posts');
+            if (!stored) {
+                localStorage.setItem('robotics_team_posts', JSON.stringify(defaultPosts));
+                return defaultPosts;
+            }
+            return JSON.parse(stored);
         }
-    }
-    updateVisitorCount();
-</script>
+
+        function savePosts(posts) {
+            localStorage.setItem('robotics_team_posts', JSON.stringify(posts));
+        }
+
+        function renderPosts() {
+            const posts = getPosts();
+            const container = document.getElementById('posts-container');
+            const noPostsEl = document.getElementById('no-posts');
+            
+            container.innerHTML = '';
+
+            const filtered = currentFilter === 'ALL' 
+                ? posts 
+                : posts.filter(p => p.category === currentFilter);
+
+            if (filtered.length === 0) {
+                noPostsEl.classList.remove('hidden');
+                return;
+            } else {
+                noPostsEl.classList.add('hidden');
+            }
+
+            // Sort by date descending
+            filtered.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+            filtered.forEach(post => {
+                const badgeColor = post.category === 'FTC' 
+                    ? 'bg-cyan-500/10 text-cyan-400 border-cyan-500/30' 
+                    : 'bg-pink-500/10 text-pink-500 border-pink-500/30';
+                
+                const imgSrc = post.image && post.image.trim() !== '' 
+                    ? post.image 
+                    : 'https://images.unsplash.com/photo-1485827404703-89b55fcc595e?auto=format&fit=crop&w=800&q=80';
+
+                const cardHTML = `
+                    <div class="bg-cardBg border border-gray-800 rounded-2xl overflow-hidden flex flex-col hover:border-gray-700 transition group">
+                        <div class="h-48 overflow-hidden relative">
+                            <img src="${imgSrc}" alt="${post.title}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500" onerror="this.src='https://placehold.co/600x400/111827/00d2ff?text=Robotics+Activity'">
+                            <div class="absolute top-3 left-3">
+                                <span class="px-3 py-1 rounded-full text-xs font-bold border backdrop-blur-md ${badgeColor}">
+                                    ${post.category}
+                                </span>
+                            </div>
+                        </div>
+                        <div class="p-6 flex flex-col flex-grow">
+                            <div class="flex items-center space-x-2 text-xs text-gray-500 mb-2">
+                                <i class="fa-regular fa-calendar"></i>
+                                <span>${post.date}</span>
+                            </div>
+                            <h3 class="text-lg font-bold text-white mb-2 line-clamp-2">${post.title}</h3>
+                            <p class="text-gray-400 text-sm line-clamp-3 mb-6 flex-grow">${post.content}</p>
+                            <button onclick="deletePost(${post.id})" class="text-xs text-red-400 hover:text-red-300 flex items-center space-x-1 self-start mt-auto">
+                                <i class="fa-solid fa-trash"></i>
+                                <span>Xóa bài viết</span>
+                            </button>
+                        </div>
+                    </div>
+                `;
+                container.innerHTML += cardHTML;
+            });
+        }
+
+        function filterPosts(category) {
+            currentFilter = category;
+            ['ALL', 'FTC', 'V5'].forEach(cat => {
+                const btn = document.getElementById(`filter-${cat}`);
+                if (cat === category) {
+                    btn.className = "px-4 py-2 rounded-lg text-sm font-semibold transition bg-cyan-500 text-black";
+                } else {
+                    btn.className = "px-4 py-2 rounded-lg text-sm font-semibold transition text-gray-400 hover:text-white";
+                }
+            });
+            renderPosts();
+        }
+
+        function openPostModal() {
+            document.getElementById('post-modal').classList.remove('hidden');
+            // Set default date to today
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('post-date').value = today;
+        }
+
+        function closePostModal() {
+            document.getElementById('post-modal').classList.add('hidden');
+            document.getElementById('create-post-form').reset();
+        }
+
+        function handlePostSubmit(e) {
+            e.preventDefault();
+            const title = document.getElementById('post-title').value;
+            const category = document.getElementById('post-category').value;
+            const date = document.getElementById('post-date').value;
+            const image = document.getElementById('post-image').value;
+            const content = document.getElementById('post-content').value;
+
+            const posts = getPosts();
+            const newPost = {
+                id: Date.now(),
+                title,
+                category,
+                date,
+                image,
+                content
+            };
+
+            posts.unshift(newPost);
+            savePosts(posts);
+            closePostModal();
+            renderPosts();
+        }
+
+        function deletePost(id) {
+            if (confirm("Bạn có chắc chắn muốn xóa bài viết này không?")) {
+                let posts = getPosts();
+                posts = posts.filter(p => p.id !== id);
+                savePosts(posts);
+                renderPosts();
+            }
+        }
+
+        // Initialize on load
+        window.onload = function() {
+            renderPosts();
+        }
+    </script>
 </body>
 </html>
